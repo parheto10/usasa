@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- doccure/booking-success.html  30 Nov 2019 04:12:16 GMT -->
+<head>
+		<meta charset="utf-8">
+		<title>Paiement | GHS</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        {% include  'css.html' %}
+	</head>
+	<body>
+
+		<!-- Main Wrapper -->
+		<div class="main-wrapper">
+
+			<!-- Header -->
+			    {% include '_partials/header.html' %}
+			<!-- /Header -->
+
+			<!-- Breadcrumb -->
+			<div class="breadcrumb-bar">
+				<div class="container-fluid">
+					<div class="row align-items-center">
+						<div class="col-md-12 col-12">
+							<nav aria-label="breadcrumb" class="page-breadcrumb">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="/">Accueil</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Succès</li>
+								</ol>
+							</nav>
+							<h2 class="breadcrumb-title">Succès</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /Breadcrumb -->
+
+			<!-- Page Content -->
+			<div class="content success-page-cont">
+				<div class="container-fluid">
+
+					<div class="row justify-content-center">
+						<div class="col-lg-6">
+
+							<!-- Success Card -->
+							<div class="card success-card">
+								<div class="card-body">
+									<div class="success-cont">
+										<i class="fas fa-exclamation-triangle"></i>
+										<h3 class="text-danger"> Une Erreur est Survenue lors paiement Réessayer SVP !!!</h3>
+                                        <a href="{% url 'patient:abonnement' %}" class="btn badge-info">Retour à la Page D'abonnement</a>
+									</div>
+								</div>
+							</div>
+							<!-- /Success Card -->
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<!-- /Main Wrapper -->
+
+		{% include 'js.html' %}
+
+	</body>
+
+<!-- doccure/booking-success.html  30 Nov 2019 04:12:16 GMT -->
+</html>

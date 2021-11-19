@@ -1,0 +1,44 @@
+{% extends "base1.html" %}
+
+{% block container %}
+<div class="row centered-form">
+  <div class="col-sm-8 offset-2">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title text-center">Veuillez rentrer votre numéro de téléphone</h3>
+      </div>
+      <div class="card-body text-center">
+        <form class="text-center" role="form" method="POST">
+          {% csrf_token %}
+
+          {{ form.non_field_errors }}
+          {{ form.phone_number.errors }}
+          {{ form.via.errors }}
+
+          <div class="row text-center">
+              {{ form.via }}
+            <input type="tel" id="intl_phone_number" class="form-control" />
+          </div>
+
+          <input type="submit" value="Suivant" class="btn btn-info btn-block">
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+    const phoneInputField = document.querySelector("#intl_phone_number");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        separateDialCode: true,
+        hiddenInput: "phone_number",
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.11/js/utils.js"
+        {#utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.min.js"#}
+        });
+</script>
+{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
+{% endblock %}

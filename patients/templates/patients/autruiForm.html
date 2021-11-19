@@ -1,0 +1,92 @@
+{% load static %}
+<!doctype html>
+{% load widget_tweaks %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RDV - OK | GHS</title>
+    {% include 'css.html' %}
+    {% include 'js.html' %}
+    <script>
+        $(document).ready(function(){
+            $("#add_event").modal('show');
+        });
+    </script>
+</head>
+<body>
+    <div id="add_event" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="margin-bottom: -10px">
+                    <h4 class="modal-title">INFORMATIONS RDV</h4>
+                    <p class="text-right">
+                        <a class="btn btn-info" href="{% url 'patient:dashboard' %}">Compte</a>
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label>Nom </label>
+                                {% render_field form.nom class="form-control" placeholder="Nom" %}
+                            </div>
+                            <div class="form-group">
+                                <label>Prénoms </label>
+                                {% render_field form.prenoms class="form-control" placeholder="Prénoms" %}
+                            </div>
+                            <div class="form-group">
+                                <label>Date de naissance </label>
+                                {% render_field form.date_naissance type="date" class="form-control" placeholder="Date Naissance" %}
+                            </div>
+                            <div class="form-group">
+                                <label> Confirmer la Date RDV</label>
+                                {% render_field form.date_rdv type="date" class="form-control" placeholder="Date RDV" %}
+                            </div>
+                            <div class="form-group">
+                                <label>Confirmer HEURE RDV</label>
+                                {% render_field form.heure_rdv type="time" class="form-control time ui-timepicker-input" placeholder="Heure RDV" %}
+                            </div>
+                            <div class="payment-widget">
+                                <div class="submit-section">
+                                    <button class="btn btn-primary submit-btn btn-block">Valider</button>
+                                </div>
+                                <!-- /Submit Section -->
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Add Event Modal -->
+{#    {% block custom_js %}#}
+{#            {% include 'js.html' %}#}
+{#            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.js"></script>#}
+{#            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>#}
+{#            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>#}
+{#            <script>#}
+{#                  $( function() {#}
+{#                    $( "#id_date_naissance" ).datepicker({#}
+                        {#dateFormat: 'dd-mm-yy'#}
+{#                        language:'fr',#}
+{#                        altField: "#datepicker",#}
+{#                        closeText: 'Fermer',#}
+{#                        prevText: 'Précédent',#}
+{#                        nextText: 'Suivant',#}
+{#                        currentText: 'Aujourd\'hui',#}
+{#                        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],#}
+{#                        monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],#}
+{#                        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],#}
+{#                        dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],#}
+{#                        dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],#}
+{#                        weekHeader: 'Sem.',#}
+{#                        dateFormat: 'yy-mm-dd'#}
+{#                    });#}
+{#                  } );#}
+{#            </script>#}
+{#        {% endblock %}#}
+</body>
+</html>
+

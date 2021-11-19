@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- doccure/booking-success.html  30 Nov 2019 04:12:16 GMT -->
+<head>
+		<meta charset="utf-8">
+		<title>Paiement | GHS</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        {% include  'css.html' %}
+	</head>
+	<body>
+
+		<!-- Main Wrapper -->
+		<div class="main-wrapper">
+
+			<!-- Header -->
+			    {% include '_partials/header.html' %}
+			<!-- /Header -->
+
+			<!-- Breadcrumb -->
+			<div class="breadcrumb-bar">
+				<div class="container-fluid">
+					<div class="row align-items-center">
+						<div class="col-md-12 col-12">
+							<nav aria-label="breadcrumb" class="page-breadcrumb">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="/">Accueil</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Succès</li>
+								</ol>
+							</nav>
+							<h2 class="breadcrumb-title">Succès</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /Breadcrumb -->
+
+			<!-- Page Content -->
+			<div class="content success-page-cont">
+				<div class="container-fluid">
+
+					<div class="row justify-content-center">
+						<div class="col-lg-6">
+
+							<!-- Success Card -->
+							<div class="card success-card">
+								<div class="card-body">
+									<div class="success-cont">
+                                        <h2 class="text-uppercase mb-3" style="text-decoration: underline">Informations de Paiement</h2>
+										<i class="fas fa-check"></i>
+										<h3>Votre Paiement à bien été Valider!, <br>
+                                            Votre Numéro de Compte est  : <br>
+                                            <h2 class="text-danger"><b>{{ Num }}, </b></h2>
+                                            Vous bénéfiez de <b>{{ nb_consultation }}</b> Consultations gratuites pour 1 An
+                                        </h3>
+{#										<p>Appointment booked with <strong>Dr. Darren Elder</strong><br> on <strong>12 Nov 2019 5:00PM to 6:00PM</strong></p>#}
+{#										<a href="invoice-view.html" class="btn btn-primary view-inv-btn">View Invoice</a>#}
+									</div>
+								</div>
+							</div>
+							<!-- /Success Card -->
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<!-- /Main Wrapper -->
+
+		{% include 'js.html' %}
+
+	</body>
+
+<!-- doccure/booking-success.html  30 Nov 2019 04:12:16 GMT -->
+</html>

@@ -1,0 +1,320 @@
+{% load static %}
+{% load widget_tweaks %}
+{#{% load bootstrap4 %}#}
+{# Load CSS and JavaScript #}
+{#{% bootstrap_css %}#}
+{#{% bootstrap_javascript %}#}
+{#{% bootstrap_messages %}#}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- doccure/calendar.html  30 Nov 2019 04:12:18 GMT -->
+<head>
+		<meta charset="utf-8">
+		<title>RDV | GHS</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        {% include  'css.html' %}
+{#        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css">#}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <style>
+            .col-lg-12.attendance_div_abonnement {
+                padding: 10px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                background: #37cae3;
+                border: 10px solid white;
+                text-align: center;
+                color: #fff;
+                border-radius: 30px;
+                box-shadow: 1px 1px 1px grey;
+                margin-top: 25px;
+                margin-bottom: 25px;
+            }
+            .col-lg-12.attendance_div_myrdv {
+                padding: 10px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                background: #28a745;
+                border: 10px solid #c9c2c2;
+                text-align: center;
+                color: #fff;
+                border-radius: 30px;
+                box-shadow: 1px 1px 1px grey;
+                margin-top: 25px;
+                margin-bottom: 25px;
+            }
+            .col-lg-6.attendance_div_red {
+                padding: 10px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                background: #28a745;
+                border: 10px solid #c9c2c2;
+                text-align: center;
+                color: #fff;
+                border-radius: 30px;
+                box-shadow: 1px 1px 1px grey;
+                margin-top: 25px;
+                margin-bottom: 25px;
+            }
+            .col-lg-6.attendance_div_green {
+                padding: 10px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                {#background: rgb(255, 165, 0);#}
+                background: #15558D;
+                border: 10px solid #c9c2c2;
+                text-align: center;
+                color: #fff;
+                border-radius: 30px;
+                box-shadow: 1px 1px 1px grey;
+                margin-top: 25px;
+                margin-bottom: 25px;
+            }
+        </style>
+
+	</head>
+	<body>
+
+		<!-- Main Wrapper -->
+		<div class="main-wrapper">
+
+			<!-- Header -->
+			{% include '_partials/header.html' %}
+			<!-- /Header -->
+
+			<!-- Breadcrumb -->
+			<div class="breadcrumb-bar">
+				<div class="container-fluid">
+					<div class="row align-items-center">
+						<div class="col">
+							<nav aria-label="breadcrumb" class="page-breadcrumb">
+								<nav aria-label="breadcrumb" class="page-breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item active" aria-current="page">Choisir une date de Rendez-vous</li>
+                                </ol>
+                            </nav>
+                            <h2 class="breadcrumb-title">Espace RDV</h2>
+						</div>
+						<div class="col-auto text-right float-right ml-auto">
+{#							<a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_event">Prendre RDV</a>#}
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /Breadcrumb -->
+
+			<!-- Page Content -->
+			<div class="content">
+				<div class="container-fluid">
+
+					<div class="row">
+						<!-- Calendar -->
+						<div class="col-lg-12">
+							<div class="card col-lg-6 offset-3">
+								<div class="card-body">
+                                    <div class="col-lg-12 attendance_div_myrdv">
+                                        <a href="#" data-toggle="modal" data-target="#add_event" class="btn btn-lg" style="color: #FFFFFF; border-radius: 30px;background: url() no-repeat bottom center; font-weight: bold; letter-spacing: 2.5px; font-size: 26px"> CHOISIR MA DATE DE RDV</a>
+                                    </div>
+{#                                    <a href="#" data-toggle="modal" data-target="#add_event" class="btn btn-lg" style="color: #FFFFFF; border-radius: 30px;background: url() no-repeat bottom center; font-weight: bold; letter-spacing: 2.5px; font-size: 26px">PRENDRE RENDEZ-VOUS</a>#}
+{#									<div id="calendar"></div>#}
+								</div>
+							</div>
+						</div>
+						<!-- /Calendar -->
+
+					</div>
+
+				</div>
+
+			</div>
+			<!-- /Page Content -->
+
+			<!-- Footer -->
+			{% include '_partials/footer.html' %}
+			<!-- /Footer -->
+
+		</div>
+		<!-- /Main Wrapper -->
+
+		<!-- Add Event Modal -->
+		<div id="add_event" class="modal custom-modal fade" role="dialog">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Choisir ma date de RDV</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label>Date RDV</label>
+                                {% render_field form.date_rdv class="form-control" placeholder="Date RDV" %}
+                            </div>
+                            <div class="form-group">
+                                <label>HEURE RDV</label>
+                                {% render_field form.heure_rdv type="time" class="form-control time ui-timepicker-input" placeholder="Heure RDV" %}
+                            </div>
+                            <div class="payment-widget">
+                                <!-- Terms Accept -->
+                                <!-- Submit Section -->
+                                <div class="submit-section">
+                                    <button class="btn btn-primary submit-btn btn-block">Valider</button>
+                                </div>
+                                <!-- /Submit Section -->
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Add Event Modal -->
+
+		<!-- Add Event Modal -->
+		<div class="modal custom-modal fade none-border" id="my_event">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Formulaire de RENDEZ-VOUS</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body"></div>
+					<div class="modal-footer justify-content-center">
+						<button type="button" class="btn btn-success save-event submit-btn">Create event</button>
+						<button type="button" class="btn btn-danger delete-event submit-btn" data-dismiss="modal">Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Add Event Modal -->
+
+		<!-- Add Category Modal -->
+		<div class="modal custom-modal fade" id="add_new_event">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Add Category</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label>Category Name</label>
+								<input class="form-control form-white" placeholder="Enter name" type="text" name="category-name" />
+							</div>
+							<div class="form-group">
+								<label>Choose Category Color</label>
+								<select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
+									<option value="success">Success</option>
+									<option value="danger">Danger</option>
+									<option value="info">Info</option>
+									<option value="primary">Primary</option>
+									<option value="warning">Warning</option>
+									<option value="inverse">Inverse</option>
+								</select>
+							</div>
+							<div class="submit-section text-center">
+								<button type="button" class="btn btn-primary save-category submit-btn" data-dismiss="modal">Save</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Add Category Modal -->
+        {% block custom_js %}
+            {% include 'js.html' %}
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.js"></script>
+            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+            <script>
+                $('#id_heure_rdv').timepicker({
+                    'step': 10,
+                    'minTime': '7',
+                    'maxTime': '20',
+                    {#timeFormat: 'H:m',#}
+                    dynamic: true,
+                    dropdown: true,
+                    scrollbar: true,
+                    use24hours: true,
+                    language:'fr',
+                    minTime: '07',
+                    {#maxTime: '20',#}
+                    {#defaultTime: '11',#}
+                    startTime: '07',
+                    {#dynamic: false,#}
+                    {#dropdown: true,#}
+                    {#scrollbar: true,#}
+
+                    {#language:'fr',#}
+                });
+                {#$('.id_heure_rdv').timepicker({#}
+                {#    timeFormat: 'h:mm p',#}
+                {#    interval: 10,#}
+                {#    minTime: '6',#}
+                {#    maxTime: '8:00pm',#}
+                {#    defaultTime: '7',#}
+                {#    startTime: '07:00',#}
+                {#    dynamic: true,#}
+                {#    dropdown: true,#}
+                {#    scrollbar: true,#}
+                {#    use24hours: true#}
+                {#});#}
+                {#$('.id_heure_rdv').timepicker({#}
+                {#    timeFormat: 'h:mm p',#}
+                {#    interval: 10,#}
+                {#    minTime: '07',#}
+                {#    maxTime: '8:00pm',#}
+                {#    defaultTime: '11',#}
+                {#    startTime: '07:00',#}
+                {#    dynamic: false,#}
+                {#    dropdown: true,#}
+                {#    scrollbar: true,#}
+                {#    use24hours: true#}
+                {#    language:'fr',#}
+                {#});#}
+                {#$('#id_heure_rdv').timepicker({#}
+                {#    'step: 10,#}
+                    {#minuteStepping:10,#}
+                    {#format: 'hh:mm',#}
+                {#    timeFormat: 'HH:mm:ss p',#}
+                {#    pickTime: false,#}
+                {#    language:'fr',#}
+                {#    use24hours: true#}
+                {#});#}
+                {#$('#id_heure_rdv').timepicker({#}
+                {#    'step': function(i) {#}
+                {#        return (i%2) ? 15 : 45;#}
+                {#    }#}
+                {#});#}
+            </script>
+            <script>
+                  $( function() {
+                    $( "#id_date_rdv" ).datepicker({
+                        {#dateFormat: 'dd-mm-yy'#}
+                        language:'fr',
+                        altField: "#datepicker",
+                        closeText: 'Fermer',
+                        prevText: 'Précédent',
+                        nextText: 'Suivant',
+                        currentText: 'Aujourd\'hui',
+                        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                        monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+                        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                        dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+                        dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                        weekHeader: 'Sem.',
+                        dateFormat: 'yy-mm-dd'
+                    });
+                  } );
+            </script>
+        {% endblock %}
+
+	</body>
+
+<!-- doccure/calendar.html  30 Nov 2019 04:12:19 GMT -->
+</html>

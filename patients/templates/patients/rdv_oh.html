@@ -1,0 +1,77 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RDV - OK | GHS</title>
+    {% include 'css.html' %}
+    {% include 'js.html' %}
+    <script>
+        $(document).ready(function(){
+            $("#add_event").modal('show');
+        });
+    </script>
+</head>
+<body>
+
+    <!-- Add Event Modal -->
+    <div id="add_event" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">RDV ENREGISTRER AVEC SUCCES</h4>
+                    <p class="text-right">
+                        <a class="btn btn-info" href="{% url 'patient:dashboard' %}">Compte</a>
+                    </p>
+{#                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                        <span aria-hidden="true">&times;</span>#}
+{#                    </button>#}
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12 text-center modal-title">
+                        <p style="font-size: 18px;">
+                            Rdv Enregistrer Avec Succès, Pour une Meilleur prise en Charge Nous vous demandons de Préciser les Symptômes dont vous Soufrez
+                        </p>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <p class="text-center">
+                        <a class="btn btn-primary" href="{% url 'patient:symptomes_enfants' %}"> Enfants et Nourrissons ?</a>
+                        <a class="btn btn-primary" href="{% url 'patient:symptomes_adultes' %}"> Adultes ?</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Add Event Modal -->
+
+{#    <div class="modal fade"  data-keyboard="false" data-backdrop="static" id="SymptomesForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">#}
+{#        <div class="modal-dialog modal-lg" role="document">#}
+{#            <div class="panel panel-primary">#}
+{#                    <div class="panel-heading">#}
+{#                        <a class="btn btn-primary" href="{% url 'patient:dashboard' %}">Acceder a mon Compte</a>#}
+{#                    </div>#}
+{#                    <div class="panel-body">#}
+{#                        <div class="row">#}
+{#                            <div class="col-sm-12 text-center">#}
+{#                                <p style="font-size: 22px; font-weight: bold">#}
+{#                                    Rdv Enregistrer Avec Succès, Pour une Meilleur prise en Charge Nous vous demandons de Préciser les Symptômes dont vous Soufrez#}
+{#                                </p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="panel-footer">#}
+{#                        <p class="text-right">#}
+{#                            <a class="btn btn-primary" href="{% url 'patient:rdv_symptomes' %}">Ajouter Symptômes ?</a>#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </div>#}
+{#        </div>#}
+{#    </div>#}
+
+</body>
+</html>
+

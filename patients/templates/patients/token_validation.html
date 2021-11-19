@@ -1,0 +1,33 @@
+{% extends "base1.html" %}
+
+{% block container %}
+<div class="row centered-form">
+  <div class="col-sm-4 offset-4">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="panel-title text-center">Veuillez renseigner le code reçu par SMS</h3>
+      </div>
+
+      <div class="card-body">
+        <form role="form" method="POST">
+          {% csrf_token %}
+
+          {{ form.non_field_errors }}
+          {{ form.token.errors}}
+
+          <div class="row">
+            {{ form.token }}
+
+            <div class="col-xs-6 col-sm-6 col-md-6">
+              <div class="form-group">
+                <input type="submit" value="Verify Phone" class="btn btn-info btn-block">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

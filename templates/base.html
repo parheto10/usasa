@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>{% block title %}{% endblock %}GHS</title>
+    {% include 'css.html' %}
+    {% block custom_css %}
+    {% endblock %}
+</head>
+<body>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+
+        <!-- Header -->
+            {% include '_partials/header.html' %}
+        <!-- /Header -->
+
+        {% block content %}
+        {% endblock %}
+
+{#        <!-- Footer -->#}
+            {% include '_partials/footer.html' %}
+{#        <!-- /Footer -->#}
+
+   </div>
+   <!-- /Main Wrapper -->
+
+    {% include 'js.html' %}
+    {% block custom_js %}
+    {% endblock %}
+
+    <script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+  </script>
+
+</body>
+
+<!-- doccure/  30 Nov 2019 04:11:53 GMT -->
+</html>
