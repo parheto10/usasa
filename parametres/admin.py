@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
-from .models import Abonnement, Hopital, Service, Faq, Pays, Adulte, Enfant
+from .models import Abonnement, Hopital, Service, Faq, Pays, Adulte, Enfant, Nourrison
 # class DetailSymptomeAdmin(admin.TabularInline):
 #     model = DetailSymptome
 #     extra = 0
@@ -10,7 +10,12 @@ class AdulteAdmin(ImportExportModelAdmin):
     list_display = ['id', 'symptome']
 
 class EnfantAdmin(ImportExportModelAdmin):
-    list_display = ['id', 'symptome']
+    list_display = ['id', 'symptome', 'signal',]
+    list_editable = ['symptome', 'signal',]
+
+class NourrisonAdmin(ImportExportModelAdmin):
+    list_display = ['id', 'symptome', 'signal',]
+    list_editable = ['symptome', 'signal',]
 
 class FaqAdmin(admin.ModelAdmin):
     list_display = ['question']
@@ -31,6 +36,7 @@ class AbonnementAdmin(admin.ModelAdmin):
 
 admin.site.register(Adulte, AdulteAdmin)
 admin.site.register(Enfant, EnfantAdmin)
+admin.site.register(Nourrison, NourrisonAdmin)
 admin.site.register(Abonnement, AbonnementAdmin)
 admin.site.register(Pays)
 admin.site.register(Faq, FaqAdmin)

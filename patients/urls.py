@@ -13,7 +13,7 @@ from .views import (
     edit_rdv_enfant,
     detail_rdv,
     checkout,
-    edit_patient, rdv_ok, symptomes_enfants, symptomes_adultes, patient_rdvs, checkout_session, paiement_success, paiement_error,
+    edit_patient, rdv_ok, symptomes_enfants, symptomes_nourrissons, symptomes_adultes, patient_rdvs, checkout_session, paiement_success, paiement_error,
     phone_verification, token_validation, verified, init_rdv, rdv_autrui
     # profile_patient,
     # profile_setting
@@ -39,6 +39,7 @@ urlpatterns = [
     path('rdv/', rdv_patient, name="rdv"),
     path('rdv_symptomes_enfants/', symptomes_enfants, name="symptomes_enfants"),
     path('rdv_symptomes_adultes/', symptomes_adultes, name="symptomes_adultes"),
+    path('rdv_symptomes_nourrissons/', symptomes_nourrissons, name="symptomes_nourrissons"),
     path('edit_patient/<int:id>', edit_patient, name="edit_patient"),
     path('paiement/<int:id>', checkout, name="paiement"),
     path('checkout_session/<int:id>', checkout_session, name="checkout_session"),

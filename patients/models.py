@@ -19,7 +19,7 @@ from django.utils.safestring import mark_safe
 from phonenumber_field.modelfields import PhoneNumberField
 from sorl.thumbnail import get_thumbnail
 
-from parametres.models import Adulte, Enfant, Service, Abonnement, Pays
+from parametres.models import Adulte, Enfant,Nourrison, Service, Abonnement, Pays
 
 
 def upload_images(self, filename):
@@ -45,6 +45,11 @@ EXAMENS = (
     ("RADIOLOGIE", "RADIOLOGIE"),
 )
 
+PAYS = (
+    ("CAM", "CAMEROUN"),
+    ("CIV", "COTE D'IVOIRE"),
+)
+
 ALERTS = (
     ("APPEL", "APPEL"),
     ("EMAIL", "EMAIL"),
@@ -67,7 +72,7 @@ class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     numero_patient = models.CharField(max_length=15, verbose_name="NUMERO", unique=True, blank=True, null=True)
     genre = models.CharField(max_length=10, verbose_name="GENRE", choices=GENRE, default="H", blank=True, null=True)
-    pays = models.ForeignKey(Pays, on_delete=models.CASCADE, blank=True, null=True)  # CountryField(blank=True, null=True)
+    pays = models.CharField(max_length=50, choices=PAYS)
     dob = models.DateField(verbose_name="Date de Naissance")
     poids = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
     groupe_sanguin = models.CharField(max_length=3, verbose_name="GROUPE SANGUIN", choices=GROUPE_SANGUIN, default="A+", blank=True, null=True)
@@ -76,7 +81,7 @@ class Patient(models.Model):
     adresse = models.CharField(max_length=255, verbose_name="ADRESSE", blank=True, null=True)
     image = models.ImageField(upload_to="upload_image", blank=True, null=True)
     details = models.TextField(verbose_name="Historique Médical", null=True, blank=True)
-    nb_consultation = models.PositiveIntegerField(default=0, verbose_name="NOMBRE DE CONSULTATION")
+
 
     add_le = models.DateTimeField(auto_now_add=True)
     update_le = models.DateTimeField(auto_now=True)
@@ -106,48 +111,23 @@ class Patient(models.Model):
             return "Aucune photo"
     thumb.short_description = 'Image'
 
-    # def save(self, force_insert=False, force_update=False):
-    #     code_pays = (self.pays.code).upper()
-    #     last_id = 1
-    #     if self.pays.code == 'GHS-CIV':
-    #         # tot = Rdv.objects.count()
-    #         numero = str(Patient.objects.filter(pays__code="CIV").count() + 1)
-    #         # madate = datetime.date.today()
-    #         self.numero_patient = "%s-00%s" % (code_pays, numero)
-    #     elif self.pays.code == 'GHS-CAM':
-    #         # tot = Rdv.objects.count()
-    #         numero = str(Patient.objects.filter(pays__code="CAM").count() + 1)
-    #         # madate = datetime.date.today()
-    #         self.numero_patient = "%s-00%s" % (code_pays, numero)
-    #     else:
-    #         pass
-    #     # # if not self.id:
-    #     # code_pays = (self.pays.code).upper()
-    #     # last_id = 1
-    #     # if self.pays.code == 'CI':
-    #     #     # last_id = 1
-    #     #     tot = Profile.objects.filter(pays__code="CIV").count()
-    #     #     # last_id = 1
-    #     #     numero = str(tot + last_id)
-    #     #     # madate = datetime.date.today()
-    #     #     self.numero_patient = code_pays + "-00%s" %(numero)
-    #     # elif self.pays == 'CA':
-    #     #     # last_id = 1
-    #     #     tot = Profile.objects.filter(pays__code="CIV").count()
-    #     #     numero = str(tot + last_id)
-    #     #     # madate = datetime.date.today()
-    #     #     self.numero_patient = code_pays + "-00%s" %(numero)
-    #     # else:
-    #     #     pass
-    #     super(Patient, self).save(force_insert, force_update)
+    def clean(self):
+        # numerotation automatique
+        if not self.id:
+            # code_pays = (self.pays.code).upper()
+            if self.pays == 'CIV':
+                numero = str(Patient.objects.filter(pays="CIV").count() + 1)
+                self.numero_patient = "USASA-CIV-%s" % (numero)
+            elif self.pays == 'CAM':
+                numero = str(Patient.objects.filter(pays="CAM").count() + 1)
+                self.numero_patient = "USASA-CAM-%s" %(numero)
+            else:
+                pass
 
     def get_absolute_url(self):
-        #return reverse('patient:dashboard', args=[self.id])
         return reverse("patient:profile", kwargs={"username": self.user.username})
-        # return reverse('patient:dashboard', kwargs={"username":self.user.username}
 
 class Payment(models.Model):
-    # id = models.UUIDField(default=uuid.uuid4, unique=True,primary_key=True, editable=False)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='abonnement_patient')
     abonnement = models.ForeignKey(Abonnement, on_delete=models.CASCADE, related_name='abonnement_formule', default=1)
     prix = models.PositiveIntegerField(default=0, blank=True)
@@ -163,13 +143,8 @@ class Payment(models.Model):
     def __str__(self):
         return str(self.patient.user.username)
 
-    # def save(self, force_insert=False, force_update=False):
-    #     if self.abonnement and self.is_abonne == True:
-    #         self.nb_consultation = self.abonnement.consultation
-    #     super(Payment, self).save(force_insert, force_update)
-
 class Rdv(models.Model):
-    # id = models.UUIDField(default=uuid.uuid4, unique=True,primary_key=True, editable=False)
+    # abonnement = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
     code = models.CharField(max_length=150, blank=True, verbose_name='CODE RDV', help_text="LE CODE RDV EST GENERE AUTOMATIQUEMENT")
     date_rdv = models.DateField(verbose_name="DATE DU RDV")
     heure_rdv = models.TimeField(verbose_name="HEURE DU RDV")
@@ -189,12 +164,14 @@ class Rdv(models.Model):
     diastolique = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)#models.PositiveIntegerField(default=0)
     symptome_enfant = models.ManyToManyField(Enfant, blank=True)
     symptome_adulte = models.ManyToManyField(Adulte, blank=True)
+    symptome_nourrisson = models.ManyToManyField(Nourrison, blank=True)
     nb_rdv = models.PositiveIntegerField(default=0)
     is_ok = models.BooleanField(default=False)
     alert = models.CharField(max_length=100, choices=ALERTS, default="EMAIL", verbose_name="ALERT RDVS")
     last_examen = models.CharField(max_length=25, choices=EXAMENS, verbose_name="DERNIERS EXAMENS DES DERNIERS MOIS", default="BIOLOGIE")
     details = models.TextField(help_text="Préciser les details de la dernieres Consultation SVP", blank=True, null=True)
     diagnostique = models.TextField(help_text="Diagnostique Finale", blank=True, null=True)
+    # nb_consultation = models.PositiveIntegerField(default=0, verbose_name="NOMBRE DE CONSULTATION")
     time_zone = TimeZoneField(default='UTC')
     add_le = models.DateTimeField(auto_now_add=True)
     update_le = models.DateTimeField(auto_now=True)
@@ -225,25 +202,23 @@ class Rdv(models.Model):
         verbose_name = "rdv"
         # unique_together = ['patient', 'date_rdv']
 
-    def get_symptomes(self):
+    def get_symptome_nourrisson(self):
         ret = ''
-        if self.symptome_enfant:
-            for symp in self.symptome_enfant.all():
-                ret = ret + symp.symptome + ','
-            return ret[:-1]
-        elif self.symptome_adulte:
-            for symp in self.symptome_adulte.all():
-                ret = ret + symp.symptome + ','
-            return ret[:-1]
-        else:
-            pass
+        for symp in self.symptome_nourrisson.all():
+            ret = ret + symp.symptome + ', '
+        return ret[:-1]
 
-    # def get_symptomes(self):
-    #     ret = ''
-    #     # print(self.projet.all())
-    #     for symp in self.symptomes.all():
-    #         ret = ret + symp.symptome + ','
-    #     return ret[:-1]
+    def get_symptome_enfants(self):
+        ret = ''
+        for symp in self.symptome_enfant.all():
+            ret = ret + symp.symptome + ', '
+        return ret[:-1]
+
+    def get_symptome_adultes(self):
+        ret = ''
+        for symp in self.symptome_adulte.all():
+            ret = ret + symp.symptome + ', '
+        return ret[:-1]
 
     def get_absolute_url(self):
         return reverse('patient:rdv', args=(self.id,))

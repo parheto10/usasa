@@ -26,9 +26,9 @@ from django.utils.safestring import mark_safe
 from django.views import generic
 from twilio.rest import Client
 
-from parametres.models import Adulte, Enfant, Abonnement
+from parametres.models import Adulte, Enfant, Abonnement, Nourrison
 from .forms import PatientForm, rdvForm, PaymentForm, EditRdvAdulteForm, EditRdvEnfantForm, PatientEditForm, \
-    SymptomeEnfantForm, SymptomeAdulteForm, rdvAutruiForm
+    SymptomeEnfantForm, SymptomeAdulteForm, rdvAutruiForm, SymptomeNourrissonForm
 from ghs_med.forms import UserForm
 from .models import Patient, Rdv, Payment
 from .utils import Calendar
@@ -106,7 +106,7 @@ def edit_patient(request, id=None):
 @user_passes_test(is_patient)
 def patient_dashboard(request):
     patient = Patient.objects.get(user_id=request.user.id)
-    rdvs=Rdv.objects.all().filter(patient=patient).order_by('date_rdv')
+    rdvs=Rdv.objects.all().filter(patient=patient).order_by('-date_rdv')
     today = datetime.now()
     age = today.year - patient.dob.year
     context={
@@ -120,8 +120,8 @@ def patient_dashboard(request):
 @user_passes_test(is_patient)
 def patient_rdvs(request):
     patient = Patient.objects.get(user_id=request.user.id)
-    rdvs_OK=Rdv.objects.all().filter(patient=patient, is_ok=True).order_by('date_rdv')
-    rdvs=Rdv.objects.all().filter(patient=patient, is_ok=False).order_by('date_rdv')
+    rdvs_OK=Rdv.objects.all().filter(patient=patient, is_ok=True).order_by('-date_rdv')
+    rdvs=Rdv.objects.all().filter(patient=patient, is_ok=False).order_by('-date_rdv')
     # today = datetime.now()
     # age = today.year - patient.dob.year
     context={
@@ -145,70 +145,28 @@ def add_patient(request):
             user.set_password(password)
             user.save()
             patient=patientForm.save(commit=False)
-            numero = patient.numero_patient
             patient.user=user
-            code_pays = (patient.pays.code).upper()
-            if patient.pays.code == 'GHS-CIV':
-                # tot = Rdv.objects.count()
-                numero = str(Patient.objects.filter(pays__code="CIV").count() + 1)
-                # madate = datetime.date.today()
-                patient.numero_patient = "%s-00%s" % (code_pays, numero)
-            elif patient.pays.code == 'GHS-CAM':
-                # tot = Rdv.objects.count()
-                numero = str(Patient.objects.filter(pays__code="CAM").count() + 1)
-                # madate = datetime.date.today()
-                patient.numero_patient = "%s-00%s" % (code_pays, numero)
-            else:
-                pass
-            # sender = "+225-4-856-6846"
-            # account_sid = 'AC7538f3cd9e32c282bfe2794c300d3a1b'
-            account_sid = 'ACa9b3a79bcacc0ec38c29135fc5e395d1'
-            # auth_token = 'a203471476d1f63807e60883fee01140'
-            auth_token = '85aa55fb1024bfe53a8d05104af76b91'
+            account_sid = 'ACf9539e42d9b32b5c9b190237d6a3ae35'
+            auth_token = '6b68266f48c0cde4d5d81453a4eade47'
             client = Client(account_sid, auth_token)
-
             message = client.messages.create(
-                # messaging_service_sid='MG46bede6f533c252fa1e9843bde7f74aa',
-                messaging_service_sid='MG2305ac0396286fee0017fff8db4c9a03',
-                # body='bienvenus sur GHS',
-                body='Compte créé avec Succès, Bienvenue Sur USASA-HEALTH - GHS, Votre code est %s' %(patient.pk),
+                messaging_service_sid='MGb48e6a51a4cd481f6f44f4f51212ebdb',
+                body='Compte créé avec Succès, Bienvenue Sur USASA-HEALTH, Votre code est: %s' %(patient.numero_patient),
                 to=patient.telephone1
             )
             print(message.sid)
-            # sender = "+225-4-856-6846"
-            # sms = 'Compte créé avec Succès, Bienvenue Sur GLOBAL HEALTH SANTE - GHS, votre numero Patinet est : %s', (patient.numero_patient)
-            # client = Client("AC6f9cb34825cbcf101f780c6094364588", "5f8cbe6a6c2c683e7d98d4d336b02900")
-            # client.messages.create(
-            #     to=["+225%s"%patient.telephone1, sender],
-            #     from_= sender,
-            #     body=sms
-            # )
-            # sender = "+225-4-856-6846"
-            # sms = 'Compte créé avec Succès, Bienvenue Sur GLOBAL HEALTH SANTE - GHS, votre numero Patinet est : %s', (patient.numero_patient)
-            # client = Client("AC6f9cb34825cbcf101f780c6094364588", "5f8cbe6a6c2c683e7d98d4d336b02900")
-            # client.messages.create(
-            #                        to=["+225%s"%patient.telephone1],
-            #                        from_=sender,
-            #                        body=sms)
+
+            subject = 'USASA-HEALTH'
+            message = 'Compte créé avec Succès, Bienvenue Sur USASA-HEALTH, Votre code est: %s' %(patient.numero_patient)
+            send_mail(subject, message, settings.EMAIL_HOST_USER,  [email], fail_silently=False)
             patient=patient.save()
-            # subject = 'Bienvenue Sur GLOBAL HEALTH SANTE - GHS'
-            # message = 'Compte créé avec Succès, Bienvenue Sur GLOBAL HEALTH SANTE - GHS, votre numero Patinet est : %s', (patient.numero_patient),
-            # send_mail(
-            #     subject,
-            #     message,
-            #     settings.EMAIL_HOST_USER,
-            #     [email],
-            #     fail_silently=False,
-            # )
             print(patient)
             patient_group = Group.objects.get_or_create(name='PATIENTS')
             patient_group[0].user_set.add(user)
             patient = authenticate(username=user.username, password=password)
             dj_login(request, patient)
-            # if next:
-            #     return redirect(next)
             messages.success(request, "Inscription effectuée avec succès")
-            return HttpResponseRedirect(reverse('patient:rdv'))
+            return HttpResponseRedirect(reverse('patient:abonnement'))
         else:
             messages.error(request, "Désole Une Erreur est Survenue, Réessayer SVP !!!")
 
@@ -236,19 +194,23 @@ def rdv_patient(request):
         if form.is_valid():
             rdv=form.save(commit=False)
             rdv.patient = patient
-            account_sid = 'ACa9b3a79bcacc0ec38c29135fc5e395d1'
-            auth_token = '85aa55fb1024bfe53a8d05104af76b91'
+            account_sid = 'ACf9539e42d9b32b5c9b190237d6a3ae35'
+            auth_token = '6b68266f48c0cde4d5d81453a4eade47'
             client = Client(account_sid, auth_token)
-
             message = client.messages.create(
-                messaging_service_sid='MG2305ac0396286fee0017fff8db4c9a03',
+                messaging_service_sid='MGb48e6a51a4cd481f6f44f4f51212ebdb',
                 body='Rendz-vous Validé avec Succès à la date du %s à %s :' %(rdv.date_rdv, rdv.heure_rdv),
                 to=patient.telephone1
             )
             print(message.sid)
-            # rdv.patient=Patient.objects.get(user_id=request.user.id)
+
+            email = patient.user.email
+            subject = 'USASA-HEALTH'
+            message = 'Rendz-vous Validé avec Succès à la date du %s à %s :' %(rdv.date_rdv, rdv.heure_rdv)
+            send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
+
             rdv.save()
-            # form.save_m2m()
+            # rdv.save_m2m()
         return HttpResponseRedirect(reverse('patient:init_rdv'))
     mydict = {'form': form, 'patient': patient}
     return render(request,'patients/calendar1.html',context=mydict)
@@ -265,11 +227,16 @@ def rdv_autrui(request):
             rdv_autrui.patient = patient
             today = date.today()
             rdv_autrui.age = today.year - (rdv_autrui.date_naissance).year
-            rdv_autrui.save()
-            if rdv_autrui.age <=16:
+
+            if rdv_autrui.age <=2:
+                return HttpResponseRedirect(reverse('patient:symptomes_nourrissons'))
+            elif rdv_autrui.age >= 3 and rdv_autrui.age <14:
                 return HttpResponseRedirect(reverse('patient:symptomes_enfants'))
-            elif rdv_autrui.age > 16 :
+            elif rdv_autrui.age > 15 :
                 return HttpResponseRedirect(reverse('patient:symptomes_adultes'))
+
+            rdv_autrui.save()
+            form.save_m2m()
         # return HttpResponseRedirect(reverse('patient:dashboard'))
     mydict = {'form': form, 'patient': patient}
     return render(request, 'patients/autruiForm.html', context=mydict)
@@ -279,6 +246,22 @@ def rdv_autrui(request):
 def symptomes_adultes(request):
     patient = request.user.patient
     form=SymptomeAdulteForm()
+    if request.method=='POST':
+        form=rdvForm(request.POST)
+        if form.is_valid():
+            symptome=form.save(commit=False)
+            symptome.patient = patient
+            symptome.save()
+            form.save_m2m()
+        return HttpResponseRedirect(reverse('patient:dashboard'))
+    mydict = {'form': form, 'patient': patient}
+    return render(request,'patients/symptomesForm.html',context=mydict)
+
+@login_required(login_url='connexion')
+@user_passes_test(is_patient)
+def symptomes_nourrissons(request):
+    patient = request.user.patient
+    form=SymptomeNourrissonForm()
     # patient=Patient.objects.get(user_id=request.user.id) #for profile picture of patient in sidebar
     if request.method=='POST':
         form=rdvForm(request.POST)
@@ -310,7 +293,7 @@ def symptomes_enfants(request):
 
 @login_required(login_url='connexion')
 @user_passes_test(is_patient)
-def init_rdv(request):
+def init_rdv(request, id=None):
     return render(request,'patients/rdv_init.html')
 
 @login_required(login_url='connexion')
@@ -361,8 +344,10 @@ def edit_rdv_enfant(request, id=None):
 def detail_rdv(request, id=None):
     user = request.user.patient
     instance = get_object_or_404(Rdv, id=id)
+    # symptomes = instance.
     context = {
         "instance": instance,
+        # "symptomes": symptomes,
     }
     return render(request, "patients/detail_rdv.html", context)
 

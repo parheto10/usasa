@@ -52,9 +52,10 @@
                                             Votre Numéro de Compte est  : <br>
                                             <h2 class="text-danger"><b>{{ Num }}, </b></h2>
                                             Vous bénéfiez de <b>{{ nb_consultation }}</b> Consultations gratuites pour 1 An
+                                            <br />
+                                            <a href="{% url 'patient:rdv' %}" class="btn btn-primary">PRENDRE RDV</a>
                                         </h3>
-{#										<p>Appointment booked with <strong>Dr. Darren Elder</strong><br> on <strong>12 Nov 2019 5:00PM to 6:00PM</strong></p>#}
-{#										<a href="invoice-view.html" class="btn btn-primary view-inv-btn">View Invoice</a>#}
+
 									</div>
 								</div>
 							</div>

@@ -33,11 +33,23 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_HOST_PASSWORD = "P@premium2@#"
 EMAIL_HOST_USER = "bebeto10toure@gmail.com"
+EMAIL_HOST_PASSWORD = "P@premium2@#"
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = "bebeto10toure@gmail.com"
+# EMAIL_HOST_PASSWORD = "P@premium2@#"
+# EMAIL_USE_TLS = True
+
+# EMAIL_HOST = 'smtp.mailtrap.io'
+# EMAIL_HOST_USER = 'e51ec0039c0b59'
+# EMAIL_HOST_PASSWORD = 'c20e573551b32b'
+# EMAIL_PORT = '2525'
 
 #SERVER_EMAIL = "eba@sigfne.net"
 #DEFAULT_FROM_EMAIL = "eba@sigfne.net"
@@ -46,27 +58,27 @@ GRAPPELLI_ADMIN_TITLE = "GHS"
 
 # CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080'
-]
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    # 'DEFAULT_FILTER_BACKENDS': (
-    #     'rest_framework.filters.DjangoFilterBackend',
-    # ),
-    # 'DATETIME_FORMAT': '%a, %d %b %Y %H:%M:%S %z',
-    # 'DATETIME_INPUT_FORMATS': ['iso-8601', '%Y-%m-%d %H:%M:%S', '%a, %d %b %Y %H:%M:%S %z'],
-    # 'DATE_FORMAT': '%Y-%m-%d',
-    # 'DATE_INPUT_FORMATS': ['%Y-%m-%d', '%m/%d/%YYYY'],
-    # 'PAGE_SIZE': 20
-}
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:8080'
+# ]
+#
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentication.SessionAuthentication',
+#         'rest_framework.authentication.TokenAuthentication',
+#     ),
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAuthenticated',
+#     ),
+#     # 'DEFAULT_FILTER_BACKENDS': (
+#     #     'rest_framework.filters.DjangoFilterBackend',
+#     # ),
+#     # 'DATETIME_FORMAT': '%a, %d %b %Y %H:%M:%S %z',
+#     # 'DATETIME_INPUT_FORMATS': ['iso-8601', '%Y-%m-%d %H:%M:%S', '%a, %d %b %Y %H:%M:%S %z'],
+#     # 'DATE_FORMAT': '%Y-%m-%d',
+#     # 'DATE_INPUT_FORMATS': ['%Y-%m-%d', '%m/%d/%YYYY'],
+#     # 'PAGE_SIZE': 20
+# }
 
 
 # Application definition
@@ -80,12 +92,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #other App
-    "django_dramatiq",
+    # "django_dramatiq",
     'bootstrap4',
-    'corsheaders',
-    'djoser',
-    'rest_framework',
-    'rest_framework.authtoken',
+    # 'corsheaders',
+    # 'djoser',
+    # 'rest_framework',
+    # 'rest_framework.authtoken',
     # 'dj_rest_auth',
     # 'livereload',
     # 'djangobower',
@@ -93,11 +105,11 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'import_export',
 
-    'django_otp',
-    'django_otp.plugins.otp_totp',
-    'django_otp.plugins.otp_hotp',
-    'django_otp.plugins.otp_static',
-    'otp_messagebird',
+    # 'django_otp',
+    # 'django_otp.plugins.otp_totp',
+    # 'django_otp.plugins.otp_hotp',
+    # 'django_otp.plugins.otp_static',
+    # 'otp_messagebird',
 
     "parametres.apps.ParametresConfig",
     "patients.apps.PatientsConfig",
@@ -107,7 +119,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -116,35 +128,35 @@ MIDDLEWARE = [
     # 'livereload.middleware.LiveReloadScript',
 ]
 
-DRAMATIQ_BROKER = {
-    "BROKER": "dramatiq.brokers.rabbitmq.RabbitmqBroker",
-    "OPTIONS": {
-        "url": "amqp://localhost:5672",
-    },
-    "MIDDLEWARE": [
-        "dramatiq.middleware.Prometheus",
-        "dramatiq.middleware.AgeLimit",
-        "dramatiq.middleware.TimeLimit",
-        "dramatiq.middleware.Callbacks",
-        "dramatiq.middleware.Retries",
-        "django_dramatiq.middleware.DbConnectionsMiddleware",
-        "django_dramatiq.middleware.AdminMiddleware",
-    ]
-}
+# DRAMATIQ_BROKER = {
+#     "BROKER": "dramatiq.brokers.rabbitmq.RabbitmqBroker",
+#     "OPTIONS": {
+#         "url": "amqp://localhost:5672",
+#     },
+#     "MIDDLEWARE": [
+#         "dramatiq.middleware.Prometheus",
+#         "dramatiq.middleware.AgeLimit",
+#         "dramatiq.middleware.TimeLimit",
+#         "dramatiq.middleware.Callbacks",
+#         "dramatiq.middleware.Retries",
+#         "django_dramatiq.middleware.DbConnectionsMiddleware",
+#         "django_dramatiq.middleware.AdminMiddleware",
+#     ]
+# }
 
 # Defines which database should be used to persist Task objects when the
 # AdminMiddleware is enabled.  The default value is "default".
-DRAMATIQ_TASKS_DATABASE = "default"
+# DRAMATIQ_TASKS_DATABASE = "default"
 
-DRAMATIQ_RESULT_BACKEND = {
-    "BACKEND": "dramatiq.results.backends.redis.RedisBackend",
-    "BACKEND_OPTIONS": {
-        "url": "redis://localhost:6379",
-    },
-    "MIDDLEWARE_OPTIONS": {
-        "result_ttl": 60000
-    }
-}
+# DRAMATIQ_RESULT_BACKEND = {
+#     "BACKEND": "dramatiq.results.backends.redis.RedisBackend",
+#     "BACKEND_OPTIONS": {
+#         "url": "redis://localhost:6379",
+#     },
+#     "MIDDLEWARE_OPTIONS": {
+#         "result_ttl": 60000
+#     }
+# }
 
 
 
@@ -174,22 +186,19 @@ WSGI_APPLICATION = 'ghs_med.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite'),
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'ghs',
-#         # 'CLIENT': {
-#         #    'host': 'mongodb://admin:Samuel10@ds111012.mlab.com:11012/ghs',
-#         # }
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite'),
 #     }
 # }
+
+DATABASES = {
+     'default': {
+         'ENGINE': 'djongo',
+         'NAME': 'usasa',
+     }
+ }
 
 
 # Password validation
@@ -256,7 +265,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Client("AC7538f3cd9e32c282bfe2794c300d3a1b", "a203471476d1f63807e60883fee01140")
 
-TWILIO_VERIFY_SERVICE_SID =  'VA45f8cac6a8928094259a3f5daef3d168'
+# TWILIO_VERIFY_SERVICE_SID =  'VA45f8cac6a8928094259a3f5daef3d168'
+TWILIO_VERIFY_SERVICE_SID =  'VA0469e86fa6c41c9c197e63e3c7401271'
 TWILIO_ACCOUNT_SID = 'AC7538f3cd9e32c282bfe2794c300d3a1b'
 TWILIO_AUTH_TOKEN = 'a203471476d1f63807e60883fee01140'
 TWILIO_NUMBER = '+2250748566846'

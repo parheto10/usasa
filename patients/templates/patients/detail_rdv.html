@@ -48,7 +48,13 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <h1 class="title">SYMPTOMES</h1>
-                                        SYMPTOMES : <button type="button" class="btn btn-danger">{{ instance.get_symptomes }}</button>
+                                        {% if instance.symptome_adulte %}
+                                            SYMPTOMES : <button type="button" class="btn btn-danger">{{ instance.get_symptome_adultes }}</button>
+                                        {% elif instance.symptome_enfant %}
+                                            SYMPTOMES : <button type="button" class="btn btn-danger">{{ instance.get_symptome_enfants }}</button>
+                                        {% elif instance.symptome_nourrisson %}
+                                            SYMPTOMES : <button type="button" class="btn btn-danger">{{ instance.get_symptome_nourrisson }}</button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

@@ -11,7 +11,7 @@ from parametres.forms import BootstrapInput
 
 # from mon_ghs.MinimalSplitDateTimeMultiWidget import MinimalSplitDateTimeMultiWidget
 # from mon_ghs.widgets import BootstrapDateTimePickerInput
-from parametres.models import Enfant, Adulte, Abonnement
+from parametres.models import Enfant, Adulte, Abonnement, Nourrison
 from .models import Patient, Rdv, Payment
 
 
@@ -99,6 +99,25 @@ class SymptomeEnfantForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(SymptomeEnfantForm, self).__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'input'})
+
+class SymptomeNourrissonForm(ModelForm):
+    # symptomes = CheckboxSelectMultiple()#forms.CheckboxSelectMultiple()
+    # details = forms.CharField(widget=forms.TextInput(attrs={'size': '40'}))
+    class Meta:
+        model=Rdv
+        fields=[
+            'symptome_nourrisson',
+            # 'details'
+        ]
+        widgets = {
+            'symptome_nourrisson': forms.CheckboxSelectMultiple(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(SymptomeNourrissonForm, self).__init__(*args, **kwargs)
 
         for name, field in self.fields.items():
             field.widget.attrs.update({'class': 'input'})

@@ -24,6 +24,11 @@ def upload_logo_site(self, filename):
     name = str(int(time.time())) + extension
     return "logos/" + self.code + ".jpeg"
 
+ALERT_SYMPTOMES = (
+    ('ALERTE', 'ALERTE'),
+    ('NORMAL', 'NORMAL'),
+)
+
 class Pays(models.Model):
     # id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     code = models.CharField(max_length=3, verbose_name="CODE PAYS")
@@ -76,8 +81,25 @@ class Adulte(models.Model):
         verbose_name_plural = "SYMPTOMES ADULTES"
         verbose_name = "symptome adulte"
 
+class Nourrison(models.Model):
+    symptome = models.CharField(max_length=500, verbose_name="SYMPTOME")
+    signal = models.CharField(max_length=50, choices=ALERT_SYMPTOMES, default="NORMAL")
+
+    def __str__(self):
+        return '%s' %(self.symptome)
+
+    def save(self, force_insert=False, force_update=False):
+        self.symptome = self.symptome.upper()
+        super(Nourrison, self).save(force_insert, force_update)
+
+    class Meta:
+        ordering = ['symptome']
+        verbose_name_plural = "SYMPTOMES NOURRISSONS"
+        verbose_name = "symptome nourrisson et enfant"
+
 class Enfant(models.Model):
     symptome = models.CharField(max_length=500, verbose_name="SYMPTOME")
+    signal = models.CharField(max_length=50, choices=ALERT_SYMPTOMES, default="NORMAL")
 
     def __str__(self):
         return '%s' %(self.symptome)
@@ -88,59 +110,9 @@ class Enfant(models.Model):
 
     class Meta:
         ordering = ['symptome']
-        verbose_name_plural = "SYMPTOMES NOURRISSONS ET ENAFANTS"
-        verbose_name = "symptome nourrisson et enfant"
+        verbose_name_plural = "SYMPTOMES ENFANTS ET ADOLESCENTS"
+        verbose_name = "symptome enfant adolescent"
 
-# class CategorieSymptome(models.Model):
-#     nom = models.CharField(max_length=255)
-#     details = models.TextField(blank=True)
-#
-#     def __str__(self):
-#         return '%s' % (self.nom)
-#
-#     def save(self, force_insert=False, force_update=False):
-#         self.nom = self.nom.upper()
-#         # self.pays = self.pays.upper()
-#         super(CategorieSymptome, self).save(force_insert, force_update)
-#
-#     class Meta:
-#         verbose_name_plural = "CATEGORIE SYMPTOMES"
-#         verbose_name = "Categorie Symptome"
-#
-# class Symptome(models.Model):
-#     categorie = models.ForeignKey(CategorieSymptome, verbose_name="Categorie Symptome", on_delete=models.CASCADE, blank=True, null=True, related_name="categories_symptomes")
-#     symptome = models.CharField(max_length=500, verbose_name="SYMPTOME")
-#
-#     def __str__(self):
-#         return '%s' %(self.symptome)
-#
-#     def save(self, force_insert=False, force_update=False):
-#         self.symptome = self.symptome.upper()
-#         # self.pays = self.pays.upper()
-#         super(Symptome, self).save(force_insert, force_update)
-#
-#     class Meta:
-#         ordering = ['symptome']
-#         verbose_name_plural = "SYMPTOMES"
-#         verbose_name = "symptome"
-#
-# class DetailSymptome(models.Model):
-#     symptome = models.ForeignKey(Symptome, on_delete=models.CASCADE, related_name="details_symptomes")
-#     details = models.CharField(max_length=255)
-#
-#     def __str__(self):
-#         return '%s' %(self.symptome)
-#
-#     def save(self, force_insert=False, force_update=False):
-#         # self.symptome = self.symptome.upper()
-#         self.details = self.details.upper()
-#         # self.pays = self.pays.upper()
-#         super(DetailSymptome, self).save(force_insert, force_update)
-#
-#     class Meta:
-#         ordering = ['symptome']
-#         verbose_name_plural = "DETAILS SYMPTOMES"
-#         verbose_name = "details symptome"
 
 class Hopital(models.Model):
     code = models.CharField(max_length=5, verbose_name="CODE", unique=True)
